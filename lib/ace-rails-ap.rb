@@ -1,0 +1,2 @@
+require 'ace/rails'
+
