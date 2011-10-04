@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_development_dependency "bundler", "~> 1.0.0"
-  s.add_development_dependency "rails",   "~> 3.0"
+  s.add_development_dependency "rails",   "~> 3.1"
 
   # specify any dependencies here; for example:
   # s.add_development_dependency "rspec"
