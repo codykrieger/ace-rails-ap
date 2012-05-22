@@ -1,0 +1,3 @@
+[submodule "ext/ace"]
+	path = ext/ace
+	url = git://github.com/ajaxorg/ace.git
