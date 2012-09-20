@@ -1,20 +1,20 @@
-define('ace/mode/haxe', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/haxe_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/mode/behaviour/cstyle', 'ace/mode/folding/cstyle'], function(require, exports, module) {
+define('ace/mode/jsx', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text', 'ace/tokenizer', 'ace/mode/jsx_highlight_rules', 'ace/mode/matching_brace_outdent', 'ace/mode/behaviour/cstyle', 'ace/mode/folding/cstyle'], function(require, exports, module) {
 
 
 var oop = require("../lib/oop");
 var TextMode = require("./text").Mode;
 var Tokenizer = require("../tokenizer").Tokenizer;
-var HaxeHighlightRules = require("./haxe_highlight_rules").HaxeHighlightRules;
+var JsxHighlightRules = require("./jsx_highlight_rules").JsxHighlightRules;
 var MatchingBraceOutdent = require("./matching_brace_outdent").MatchingBraceOutdent;
 var CstyleBehaviour = require("./behaviour/cstyle").CstyleBehaviour;
 var CStyleFoldMode = require("./folding/cstyle").FoldMode;
 
-var Mode = function() {
-    this.$tokenizer = new Tokenizer(new HaxeHighlightRules().getRules());
+function Mode() {
+    this.$tokenizer = new Tokenizer(new JsxHighlightRules().getRules());
     this.$outdent = new MatchingBraceOutdent();
     this.$behaviour = new CstyleBehaviour();
     this.foldingRules = new CStyleFoldMode();
-};
+}
 oop.inherits(Mode, TextMode);
 
 (function() {
@@ -47,118 +47,131 @@ oop.inherits(Mode, TextMode);
           this.$outdent.autoOutdent(doc, row);
       };
 
-
-    this.createWorker = function(session) {
-        return null;
-    };
-
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
 });
-define('ace/mode/haxe_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/doc_comment_highlight_rules', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
-
-
-var oop = require("../lib/oop");
-var lang = require("../lib/lang");
-var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
-var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
-
-var HaxeHighlightRules = function() {
-
-    var keywords = lang.arrayToMap(
-        ("break|case|cast|catch|class|continue|default|else|enum|extends|for|function|if|implements|import|in|inline|interface|new|override|package|private|public|return|static|super|switch|this|throw|trace|try|typedef|untyped|var|while|Array|Void|Bool|Int|UInt|Float|Dynamic|String|List|Hash|IntHash|Error|Unknown|Type|Std").split("|")
-    );
-
-    var buildinConstants = lang.arrayToMap(
-        ("null|true|false").split("|")
-    );
-
-
-    // regexp must not have capturing parentheses. Use (?:) instead.
-    // regexps are ordered -> the first match is used
-
-    this.$rules = {
-        "start" : [
-            {
-                token : "comment",
-                regex : "\\/\\/.*$"
-            },
-            DocCommentHighlightRules.getStartRule("doc-start"),
-            {
-                token : "comment", // multi line comment
-                regex : "\\/\\*",
-                merge : true,
-                next : "comment"
-            }, {
-                token : "string.regexp",
-                regex : "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
-            }, {
-                token : "string", // single line
-                regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
-            }, {
-                token : "string", // single line
-                regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
-            }, {
-                token : "constant.numeric", // hex
-                regex : "0[xX][0-9a-fA-F]+\\b"
-            }, {
-                token : "constant.numeric", // float
-                regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
-            }, {
-                token : "constant.language.boolean",
-                regex : "(?:true|false)\\b"
-            }, {
-                token : function(value) {
-                    if (value == "this")
-                        return "variable.language";
-                    else if (keywords.hasOwnProperty(value))
-                        return "keyword";
-                    else if (buildinConstants.hasOwnProperty(value))
-                        return "constant.language";
-                    else
-                        return "identifier";
+define('ace/mode/jsx_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/lib/lang', 'ace/mode/doc_comment_highlight_rules', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
+    var oop = require("../lib/oop");
+    var lang = require("../lib/lang");
+    var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
+    var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
+    
+    var JsxHighlightRules = function() {
+        var keywords = lang.arrayToMap(
+            ("break|do|instanceof|typeof|case|else|new|var|catch|finally|return|void|continue|for|switch|default|while|function|this|" +
+             "if|throw|" +
+             "delete|in|try|" +
+             "class|extends|super|import|from|into|implements|interface|static|mixin|override|abstract|final|" +
+             "number|int|string|boolean|variant|" +
+             "log|assert").split("|")
+        );
+        
+        var buildinConstants = lang.arrayToMap(
+            ("null|true|false|NaN|Infinity|__FILE__|__LINE__|undefined").split("|")
+        );
+        
+        var reserved = lang.arrayToMap(
+            ("debugger|with|" +
+             "const|export|" +
+             "let|private|public|yield|protected|" +
+             "extern|native|as|operator|__fake__|__readonly__").split("|")
+        );
+        
+        var identifierRe = "[a-zA-Z_][a-zA-Z0-9_]*\\b";
+        
+        this.$rules = {
+            "start" : [
+                {
+                    token : "comment",
+                    regex : "\\/\\/.*$"
                 },
-                // TODO: Unicode escape sequences
-                // TODO: Unicode identifiers
-                regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
-            }, {
-                token : "keyword.operator",
-                regex : "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\b(?:in|instanceof|new|delete|typeof|void)"
-            }, {
-                token : "punctuation.operator",
-                regex : "\\?|\\:|\\,|\\;|\\."
-            }, {
-                token : "paren.lparen",
-                regex : "[[({<]"
-            }, {
-                token : "paren.rparen",
-                regex : "[\\])}>]"
-            }, {
-                token : "text",
-                regex : "\\s+"
-            }
-        ],
-        "comment" : [
-            {
-                token : "comment", // closing comment
-                regex : ".*?\\*\\/",
-                next : "start"
-            }, {
-                token : "comment", // comment spanning whole line
-                merge : true,
-                regex : ".+"
-            }
-        ]
+                DocCommentHighlightRules.getStartRule("doc-start"),
+                {
+                    token : "comment", // multi line comment
+                    regex : "\\/\\*",
+                    merge : true,
+                    next : "comment"
+                }, {
+                    token : "string.regexp",
+                    regex : "[/](?:(?:\\[(?:\\\\]|[^\\]])+\\])|(?:\\\\/|[^\\]/]))*[/]\\w*\\s*(?=[).,;]|$)"
+                }, {
+                    token : "string", // single line
+                    regex : '["](?:(?:\\\\.)|(?:[^"\\\\]))*?["]'
+                }, {
+                    token : "string", // single line
+                    regex : "['](?:(?:\\\\.)|(?:[^'\\\\]))*?[']"
+                }, {
+                    token : "constant.numeric", // hex
+                    regex : "0[xX][0-9a-fA-F]+\\b"
+                }, {
+                    token : "constant.numeric", // float
+                    regex : "[+-]?\\d+(?:(?:\\.\\d*)?(?:[eE][+-]?\\d+)?)?\\b"
+                }, {
+                    token : "constant.language.boolean",
+                    regex : "(?:true|false)\\b"
+                }, {
+                    token : [
+                        "storage.type",
+                        "text",
+                        "entity.name.function"
+                    ],
+                    regex : "(function)(\\s+)(" + identifierRe + ")"
+                }, {
+                    token : function(value) {
+                        if (value == "this")
+                            return "variable.language";
+                        else if (value == "function")
+                            return "storage.type";
+                        else if (keywords.hasOwnProperty(value) || reserved.hasOwnProperty(value))
+                            return "keyword";
+                        else if (buildinConstants.hasOwnProperty(value))
+                            return "constant.language";
+                        else if (/^_?[A-Z][a-zA-Z0-9_]*$/.test(value))
+                            return "language.support.class";
+                        else
+                            return "identifier";
+                    },
+                    // TODO: Unicode escape sequences
+                    // TODO: Unicode identifiers
+                    regex : identifierRe
+                }, {
+                    token : "keyword.operator",
+                    regex : "!|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|==|=|!=|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\b(?:in|instanceof|new|delete|typeof|void)"
+                }, {
+                    token : "punctuation.operator",
+                    regex : "\\?|\\:|\\,|\\;|\\."
+                }, {
+                    token : "paren.lparen",
+                    regex : "[[({<]"
+                }, {
+                    token : "paren.rparen",
+                    regex : "[\\])}>]"
+                }, {
+                    token : "text",
+                    regex : "\\s+"
+                }
+            ],
+            "comment" : [
+                {
+                    token : "comment", // closing comment
+                    regex : ".*?\\*\\/",
+                    next : "start"
+                }, {
+                    token : "comment", // comment spanning whole line
+                    merge : true,
+                    regex : ".+"
+                }
+            ]
+        };
+        
+        this.embedRules(DocCommentHighlightRules, "doc-",
+            [ DocCommentHighlightRules.getEndRule("start") ]);
     };
+    
+    oop.inherits(JsxHighlightRules, TextHighlightRules);
 
-    this.embedRules(DocCommentHighlightRules, "doc-",
-        [ DocCommentHighlightRules.getEndRule("start") ]);
-};
-
-oop.inherits(HaxeHighlightRules, TextHighlightRules);
-
-exports.HaxeHighlightRules = HaxeHighlightRules;
+    exports.JsxHighlightRules = JsxHighlightRules;
 });
 
 define('ace/mode/doc_comment_highlight_rules', ['require', 'exports', 'module' , 'ace/lib/oop', 'ace/mode/text_highlight_rules'], function(require, exports, module) {
