@@ -1,6 +1,6 @@
 # ace-rails-ap
 
-The [Ajax.org Cloud9 Editor (Ace)](/ajaxorg/ace) for the Rails 3.1 asset
+The [Ajax.org Cloud9 Editor (Ace)](https://github.com/ajaxorg/ace) for the Rails 3.1+ asset
 pipeline.
 
 ## Usage
