@@ -20,8 +20,8 @@ gem 'ace-rails-ap'
 To include a theme or mode, just put:
 
 ```javascript
-//= require ace/theme-[sometheme].js
-//= require ace/mode-[somemode].js
+//= require ace/theme-sometheme
+//= require ace/mode-somemode
 ```
 
 After `//= require ace/ace` in your `application.js` manifest.
