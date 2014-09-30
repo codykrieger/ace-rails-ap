@@ -1,43 +1,10 @@
-/* ***** BEGIN LICENSE BLOCK *****
- * Distributed under the BSD license:
- *
- * Copyright (c) 2010, Ajax.org B.V.
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of Ajax.org B.V. nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL AJAX.ORG B.V. BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * ***** END LICENSE BLOCK ***** */
-
-define('ace/ext/searchbox', ['require', 'exports', 'module' , 'ace/lib/dom', 'ace/lib/lang', 'ace/lib/event', 'ace/keyboard/hash_handler', 'ace/lib/keys'], function(require, exports, module) {
-
+define("ace/ext/searchbox",["require","exports","module","ace/lib/dom","ace/lib/lang","ace/lib/event","ace/keyboard/hash_handler","ace/lib/keys"], function(require, exports, module) {
+"use strict";
 
 var dom = require("../lib/dom");
 var lang = require("../lib/lang");
 var event = require("../lib/event");
 var searchboxCss = "\
-/* ------------------------------------------------------------------------------------------\
-* Editor Search Form\
-* --------------------------------------------------------------------------------------- */\
 .ace_search {\
 background-color: #ddd;\
 border: 1px solid #cbcbcb;\
@@ -80,7 +47,6 @@ border: 0 none;\
 -webkit-box-sizing: border-box;\
 -moz-box-sizing: border-box;\
 box-sizing: border-box;\
-display: block;\
 float: left;\
 height: 22px;\
 outline: 0;\
@@ -94,7 +60,6 @@ background: #fff;\
 border: 0 none;\
 border-left: 1px solid #dcdcdc;\
 cursor: pointer;\
-display: block;\
 float: left;\
 height: 22px;\
 margin: 0;\
@@ -127,12 +92,9 @@ border-radius: 50%;\
 border: 0 none;\
 color: #656565;\
 cursor: pointer;\
-display: block;\
 float: right;\
-font-family: Arial;\
-font-size: 16px;\
+font: 16px/16px Arial;\
 height: 14px;\
-line-height: 16px;\
 margin: 5px 1px 9px 5px;\
 padding: 0;\
 text-align: center;\
@@ -419,3 +381,8 @@ exports.Search = function(editor, isReplace) {
 };
 
 });
+;
+                (function() {
+                    window.require(["ace/ext/searchbox"], function() {});
+                })();
+            
