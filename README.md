@@ -15,16 +15,17 @@ gem 'ace-rails-ap'
 
 ```javascript
 //= require ace/ace
+//= require ace/worker-html
 ```
 
-To include a theme or mode, just put:
+To include a theme or mode, put:
 
 ```javascript
 //= require ace/theme-sometheme
 //= require ace/mode-somemode
 ```
 
-After `//= require ace/ace` in your `application.js` manifest.
+...in your `application.js` manifest as well.
 
 Then just use Ace like normal.
 
