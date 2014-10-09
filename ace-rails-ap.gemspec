@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/codykrieger/ace-rails-ap"
   s.summary     = %q{The Ajax.org Cloud9 Editor (Ace) for the Rails 3.1 asset pipeline.}
   s.description = %q{The Ajax.org Cloud9 Editor (Ace) for the Rails 3.1 asset pipeline.}
+  s.license     = "MIT"
 
   s.rubyforge_project = "ace-rails-ap"
 
