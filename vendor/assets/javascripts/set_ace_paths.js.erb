@@ -1,0 +1,5 @@
+ace.config.set('basePath', '/assets/ace');
+<% Dir[File.dirname(__FILE__) + '/ace/worker-*.js'].each do |file| %>
+<% worker = File.basename(file, '.js').sub(/^worker-/, '') %>
+ace.config.setModuleUrl("ace/mode/<%= worker %>_worker", "<%= asset_path "ace/worker-#{worker}.js" %>");
+<% end %>
