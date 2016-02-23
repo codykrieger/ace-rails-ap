@@ -1139,55 +1139,24 @@ oop.inherits(Mode, TextMode);
 exports.Mode = Mode;
 });
 
-define("ace/mode/java_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(require, exports, module) {
+define("ace/mode/wollok_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/doc_comment_highlight_rules","ace/mode/text_highlight_rules"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var DocCommentHighlightRules = require("./doc_comment_highlight_rules").DocCommentHighlightRules;
 var TextHighlightRules = require("./text_highlight_rules").TextHighlightRules;
 
-var JavaHighlightRules = function() {
+var WollokHighlightRules = function() {
     var keywords = (
-    "abstract|continue|for|new|switch|" +
-    "assert|default|goto|package|synchronized|" +
-    "boolean|do|if|private|this|" +
-    "break|double|implements|protected|throw|" +
-    "byte|else|import|public|throws|" +
-    "case|enum|instanceof|return|transient|" +
-    "catch|extends|int|short|try|" +
-    "char|final|interface|static|void|" +
-    "class|finally|long|strictfp|volatile|" +
-    "const|float|native|super|while"
+    "test|package|inherits|false|import|else|or|class|and|not|native|override|program|this|try|val|var|catch|object|super|throw|if|null|return|true|new|method"
     );
 
-    var buildinConstants = ("null|Infinity|NaN|undefined");
+    var buildinConstants = ("null|assert|console");
 
 
     var langClasses = (
-        "AbstractMethodError|AssertionError|ClassCircularityError|"+
-        "ClassFormatError|Deprecated|EnumConstantNotPresentException|"+
-        "ExceptionInInitializerError|IllegalAccessError|"+
-        "IllegalThreadStateException|InstantiationError|InternalError|"+
-        "NegativeArraySizeException|NoSuchFieldError|Override|Process|"+
-        "ProcessBuilder|SecurityManager|StringIndexOutOfBoundsException|"+
-        "SuppressWarnings|TypeNotPresentException|UnknownError|"+
-        "UnsatisfiedLinkError|UnsupportedClassVersionError|VerifyError|"+
-        "InstantiationException|IndexOutOfBoundsException|"+
-        "ArrayIndexOutOfBoundsException|CloneNotSupportedException|"+
-        "NoSuchFieldException|IllegalArgumentException|NumberFormatException|"+
-        "SecurityException|Void|InheritableThreadLocal|IllegalStateException|"+
-        "InterruptedException|NoSuchMethodException|IllegalAccessException|"+
-        "UnsupportedOperationException|Enum|StrictMath|Package|Compiler|"+
-        "Readable|Runtime|StringBuilder|Math|IncompatibleClassChangeError|"+
-        "NoSuchMethodError|ThreadLocal|RuntimePermission|ArithmeticException|"+
-        "NullPointerException|Long|Integer|Short|Byte|Double|Number|Float|"+
-        "Character|Boolean|StackTraceElement|Appendable|StringBuffer|"+
-        "Iterable|ThreadGroup|Runnable|Thread|IllegalMonitorStateException|"+
-        "StackOverflowError|OutOfMemoryError|VirtualMachineError|"+
-        "ArrayStoreException|ClassCastException|LinkageError|"+
-        "NoClassDefFoundError|ClassNotFoundException|RuntimeException|"+
-        "Exception|ThreadDeath|Error|Throwable|System|ClassLoader|"+
-        "Cloneable|Class|CharSequence|Comparable|String|Object"
+        "Object|Pair|String|Boolean|Number|Integer|Double|Collection|Set|List|Exception|Range" +
+        "|StackTraceElement"
     );
 
     var keywordMapper = this.createKeywordMapper({
@@ -1228,7 +1197,7 @@ var JavaHighlightRules = function() {
                 regex : "[a-zA-Z_$][a-zA-Z0-9_$]*\\b"
             }, {
                 token : "keyword.operator",
-                regex : "!|\\$|%|&|\\*|\\-\\-|\\-|\\+\\+|\\+|~|===|==|=|!=|!==|<=|>=|<<=|>>=|>>>=|<>|<|>|!|&&|\\|\\||\\?\\:|\\*=|%=|\\+=|\\-=|&=|\\^=|\\b(?:in|instanceof|new|delete|typeof|void)"
+                regex : "===|&&|\\*=|\\.\\.|\\*\\*|#|!|%|\\*|\\?:|\\+|\\/|,|\\+=|\\-|\\.\\.<|!==|:|\\/=|\\?\\.|\\+\\+|>|=|<|>=|=>|==|\\]|\\[|\\-=|\\->|\\||\\-\\-|<>|!=|%=|\\|"
             }, {
                 token : "lparen",
                 regex : "[[({]"
@@ -1256,21 +1225,21 @@ var JavaHighlightRules = function() {
         [ DocCommentHighlightRules.getEndRule("start") ]);
 };
 
-oop.inherits(JavaHighlightRules, TextHighlightRules);
+oop.inherits(WollokHighlightRules, TextHighlightRules);
 
-exports.JavaHighlightRules = JavaHighlightRules;
+exports.WollokHighlightRules = WollokHighlightRules;
 });
 
-define("ace/mode/java",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/java_highlight_rules"], function(require, exports, module) {
+define("ace/mode/wollok",["require","exports","module","ace/lib/oop","ace/mode/javascript","ace/mode/wollok_highlight_rules"], function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");
 var JavaScriptMode = require("./javascript").Mode;
-var JavaHighlightRules = require("./java_highlight_rules").JavaHighlightRules;
+var WollokHighlightRules = require("./wollok_highlight_rules").WollokHighlightRules;
 
 var Mode = function() {
     JavaScriptMode.call(this);
-    this.HighlightRules = JavaHighlightRules;
+    this.HighlightRules = WollokHighlightRules;
 };
 oop.inherits(Mode, JavaScriptMode);
 
@@ -1280,7 +1249,7 @@ oop.inherits(Mode, JavaScriptMode);
         return null;
     };
 
-    this.$id = "ace/mode/java";
+    this.$id = "ace/mode/wollok";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
