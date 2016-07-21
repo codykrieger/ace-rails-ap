@@ -26,13 +26,14 @@ To include a theme or mode, add them in your application.js file:
 //= require ace/mode-somemode
 ```
 
-Do not include Ace workers files in your application.js file. Then just use Ace like normal.
+Workers and modes don't need to be included in your application.js file, as they can also be loaded dynamically (see below).
 
 ## Rails Asset Pipeline
 
-Ace editor will dynamically load in run-time the workers javascript files.
-ace-rails-ap play nice with rails asset pipeline by automatically configuring the precompilation of the workers files,
-and by setting-up Ace to load the fingerprinted worker files. You have nothing to do, it just works.
+Ace will dynamically load the JavaScript files for workers and modes at run-time.
+
+ace-rails-ap plays nicely with the Rails asset pipeline by automatically configuring the precompilation of the workers and modes,
+and by setting up Ace to load the fingerprinted files. You have nothing to do, it just works.
 
 ## Migrate from previous version of ace-rails-ap
 
@@ -41,5 +42,3 @@ You may have done some customisation to allow ace-rails-ap to work in production
 
 Also replace the previous javascript manifest instruction `//= require ace/ace` by the new `//= require ace-rails-ap`, and remove
 all workers from your javascript manifest.
-
-
