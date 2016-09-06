@@ -1,9 +1,9 @@
 ace.config.set('basePath', '/assets/ace');
-<% Dir[File.dirname(__FILE__) + '/ace/worker-*.js'].sort { |file1, file2| file1 <=> file2 }.each do |file| %>
+<% Dir[File.dirname(__FILE__) + '/ace/worker-*.js'].sort.each do |file| %>
 <% worker = File.basename(file, '.js').sub(/^worker-/, '') %>
 ace.config.setModuleUrl("ace/mode/<%= worker %>_worker", "<%= asset_path "ace/worker-#{worker}.js" %>");
 <% end %>
-<% Dir[File.dirname(__FILE__) + '/ace/mode-*.js'].sort { |file1, file2| file1 <=> file2 }.each do |file| %>
+<% Dir[File.dirname(__FILE__) + '/ace/mode-*.js'].sort.each do |file| %>
 <% mode = File.basename(file, '.js').sub(/^mode-/, '') %>
 ace.config.setModuleUrl("ace/mode/<%= mode %>", "<%= asset_path "ace/mode-#{mode}.js" %>");
 <% end %>
