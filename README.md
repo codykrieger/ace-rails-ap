@@ -42,3 +42,11 @@ You may have done some customisation to allow ace-rails-ap to work in production
 
 Also replace the previous javascript manifest instruction `//= require ace/ace` by the new `//= require ace-rails-ap`, and remove
 all workers from your javascript manifest.
+
+## Limiting asset build to certain modes
+
+By default, all mode files are included in the asset build. If you want to limit the asset build to only those modes which you will use, create an initializer like the following:
+
+```ruby
+Ace::Rails.include_modes = %w{html yaml}
+```
