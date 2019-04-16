@@ -38,7 +38,7 @@ exports.$detectIndentation = function(lines, fallback) {
         return score;
     }
 
-    var changesTotal = changes.reduce(function(a,b){return a+b}, 0);
+    var changesTotal = changes.reduce(function(a,b){return a+b;}, 0);
 
     var first = {score: 0, length: 0};
     var spaceIndents = 0;
@@ -181,8 +181,8 @@ exports.commands = [{
     }
 }, {
     name: "trimTrailingSpace",
-    exec: function(editor) {
-        exports.trimTrailingSpace(editor.session);
+    exec: function(editor, args) {
+        exports.trimTrailingSpace(editor.session, args);
     }
 }, {
     name: "convertIndentation",
@@ -199,8 +199,11 @@ exports.commands = [{
     }
 }];
 
-});
-                (function() {
-                    window.require(["ace/ext/whitespace"], function() {});
+});                (function() {
+                    window.require(["ace/ext/whitespace"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
                 })();
             
