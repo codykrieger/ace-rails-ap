@@ -71,7 +71,7 @@ var PascalHighlightRules = function() {
                 next: 'pop' },
               { defaultToken: 'string.quoted.single.pascal' } ] },
           { token: 'keyword.operator',
-           regex: '[+\\-;,/*%]|:=|=' } ] }
+           regex: '[+\\-;,/*%]|:=|=' } ] };
     
     this.normalizeRules();
 };
@@ -195,4 +195,11 @@ oop.inherits(Mode, TextMode);
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
-});
+});                (function() {
+                    window.require(["ace/mode/pascal"], function(m) {
+                        if (typeof module == "object" && typeof exports == "object" && module) {
+                            module.exports = m;
+                        }
+                    });
+                })();
+            
