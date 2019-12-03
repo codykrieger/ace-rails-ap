@@ -2625,7 +2625,7 @@ var MarkdownHighlightRules = function() {
         next  : "blockquote"
     }, { // HR * - _
         token : "constant",
-        regex : "^ {0,2}(?:(?: ?\\* ?){3,}|(?: ?\\- ?){3,}|(?: ?\\_ ?){3,})\\s*$",
+        regex : "^ {0,3}(?:(?:\\* ?){3,}|(?:\\- ?){3,}|(?:\\_ ?){3,})\\s*$",
         next: "allowBlock"
     }, { // list
         token : "markup.list",
@@ -3160,6 +3160,7 @@ oop.inherits(Mode, TextMode);
 (function() {
     this.type = "text";
     this.blockComment = {start: "<!--", end: "-->"};
+    this.$quotes = {'"': '"', "`": "`"};
 
     this.getNextLineIndent = function(state, line, tab) {
         if (state == "listblock") {
