@@ -3,6 +3,6 @@ source "http://rubygems.org"
 # Specify your gem's dependencies in ace-rails-ap.gemspec
 gemspec
 
-gem "rack", "~> 1.6.11"
+gem "rack", ">= 2.1.4"
 gem "sprockets"
-gem "i18n", "~> 0.6"
+gem "i18n"

@@ -13,8 +13,6 @@ Gem::Specification.new do |s|
   s.description = %q{The Ajax.org Cloud9 Editor (Ace) for the Rails 3.1 asset pipeline.}
   s.license     = "MIT"
 
-  s.rubyforge_project = "ace-rails-ap"
-
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
