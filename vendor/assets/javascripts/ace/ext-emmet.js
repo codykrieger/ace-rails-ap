@@ -144,7 +144,9 @@ var SnippetManager = function() {
                 {regex: "\\|" + escape("\\|") + "*\\|", onMatch: function(val, state, stack) {
                     var choices = val.slice(1, -1).replace(/\\[,|\\]|,/g, function(operator) {
                         return operator.length == 2 ? operator[1] : "\x00";
-                    }).split("\x00");
+                    }).split("\x00").map(function(value){
+                        return {value: value};
+                    });
                     stack[0].choices = choices;
                     return [choices[0]];
                 }, next: "start"},
@@ -615,6 +617,12 @@ var SnippetManager = function() {
             }
             snippetMap[scope].push(s);
 
+            if (s.prefix)
+                s.tabTrigger = s.prefix;
+
+            if (!s.content && s.body)
+                s.content = Array.isArray(s.body) ? s.body.join("\n") : s.body;
+
             if (s.tabTrigger && !s.trigger) {
                 if (!s.guard && /^\w/.test(s.tabTrigger))
                     s.guard = "\\b";
@@ -631,10 +639,13 @@ var SnippetManager = function() {
             s.endTriggerRe = new RegExp(s.endTrigger);
         }
 
-        if (snippets && snippets.content)
-            addSnippet(snippets);
-        else if (Array.isArray(snippets))
+        if (Array.isArray(snippets)) {
             snippets.forEach(addSnippet);
+        } else {
+            Object.keys(snippets).forEach(function(key) {
+                addSnippet(snippets[key]);
+            });
+        }
         
         this._signal("registerSnippets", {scope: scope});
     };
@@ -684,7 +695,7 @@ var SnippetManager = function() {
                     snippet.tabTrigger = val.match(/^\S*/)[0];
                     if (!snippet.name)
                         snippet.name = val;
-                } else {
+                } else if (key) {
                     snippet[key] = val;
                 }
             }
@@ -747,15 +758,16 @@ var TabstopManager = function(editor) {
 
     this.onChange = function(delta) {
         var isRemove = delta.action[0] == "r";
-        var parents = this.selectedTabstop && this.selectedTabstop.parents || {};
+        var selectedTabstop = this.selectedTabstop || {};
+        var parents = selectedTabstop.parents || {};
         var tabstops = (this.tabstops || []).slice();
         for (var i = 0; i < tabstops.length; i++) {
             var ts = tabstops[i];
-            var active = ts == this.selectedTabstop || parents[ts.index];
+            var active = ts == selectedTabstop || parents[ts.index];
             ts.rangeList.$bias = active ? 0 : 1;
             
-            if (delta.action == "remove" && ts !== this.selectedTabstop) {
-                var parentActive = ts.parents && ts.parents[this.selectedTabstop.index];
+            if (delta.action == "remove" && ts !== selectedTabstop) {
+                var parentActive = ts.parents && ts.parents[selectedTabstop.index];
                 var startIndex = ts.rangeList.pointIndex(delta.start, parentActive);
                 startIndex = startIndex < 0 ? -startIndex - 1 : startIndex + 1;
                 var endIndex = ts.rangeList.pointIndex(delta.end, parentActive);
@@ -832,18 +844,17 @@ var TabstopManager = function(editor) {
         
         this.selectedTabstop = ts;
         var range = ts.firstNonLinked || ts;
+        if (ts.choices) range.cursor = range.start;
         if (!this.editor.inVirtualSelectionMode) {
             var sel = this.editor.multiSelect;
-            sel.toSingleRange(range.clone());
+            sel.toSingleRange(range);
             for (var i = 0; i < ts.length; i++) {
                 if (ts.hasLinkedRanges && ts[i].linked)
                     continue;
                 sel.addRange(ts[i].clone(), true);
             }
-            if (sel.ranges[0])
-                sel.addRange(sel.ranges[0].clone());
         } else {
-            this.editor.selection.setRange(range);
+            this.editor.selection.fromOrientedRange(range);
         }
         
         this.editor.keyBinding.addKeyboardHandler(this.keyboardHandler);
@@ -868,8 +879,6 @@ var TabstopManager = function(editor) {
         var ranges = this.ranges;
         tabstops.forEach(function(ts, index) {
             var dest = this.$openTabstops[index] || ts;
-            ts.rangeList = new RangeList();
-            ts.rangeList.$bias = 0;
             
             for (var i = 0; i < ts.length; i++) {
                 var p = ts[i];
@@ -879,7 +888,6 @@ var TabstopManager = function(editor) {
                 range.original = p;
                 range.tabstop = dest;
                 ranges.push(range);
-                ts.rangeList.ranges.push(range);
                 if (dest != ts)
                     dest.unshift(range);
                 else
@@ -897,6 +905,9 @@ var TabstopManager = function(editor) {
                 this.$openTabstops[index] = dest;
             }
             this.addTabstopMarkers(dest);
+            dest.rangeList = dest.rangeList || new RangeList();
+            dest.rangeList.$bias = 0;
+            dest.rangeList.addList(dest);
         }, this);
         
         if (arg.length > 2) {
@@ -939,21 +950,18 @@ var TabstopManager = function(editor) {
 
     this.keyboardHandler = new HashHandler();
     this.keyboardHandler.bindKeys({
-        "Tab": function(ed) {
-            if (exports.snippetManager && exports.snippetManager.expandWithTab(ed)) {
+        "Tab": function(editor) {
+            if (exports.snippetManager && exports.snippetManager.expandWithTab(editor))
                 return;
-            }
-
-            ed.tabstopManager.tabNext(1);
+            editor.tabstopManager.tabNext(1);
+            editor.renderer.scrollCursorIntoView();
         },
-        "Shift-Tab": function(ed) {
-            ed.tabstopManager.tabNext(-1);
+        "Shift-Tab": function(editor) {
+            editor.tabstopManager.tabNext(-1);
+            editor.renderer.scrollCursorIntoView();
         },
-        "Esc": function(ed) {
-            ed.tabstopManager.detach();
-        },
-        "Return": function(ed) {
-            return false;
+        "Esc": function(editor) {
+            editor.tabstopManager.detach();
         }
     });
 }).call(TabstopManager.prototype);

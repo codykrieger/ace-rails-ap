@@ -935,10 +935,10 @@ var PythonHighlightRules = function() {
             regex: "\\s+"
         }, {
             token: "string",
-            regex: "'(.)*'"
+            regex: "'[^']*'"
         }, {
             token: "string",
-            regex: '"(.)*"'
+            regex: '"[^"]*"'
         }, {
             token: "function.support",
             regex: "(!s|!r|!a)"
@@ -1146,6 +1146,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "ampdb",
         "ampdbfs",
         "ampmidi",
+        "ampmidicurve",
         "ampmidid",
         "areson",
         "aresonk",
@@ -1194,7 +1195,6 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "ceps",
         "cepsinv",
         "chanctrl",
-        "changed",
         "changed2",
         "chani",
         "chano",
@@ -1206,11 +1206,19 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "chnclear",
         "chnexport",
         "chnget",
+        "chngeta",
+        "chngeti",
+        "chngetk",
         "chngetks",
+        "chngets",
         "chnmix",
         "chnparams",
         "chnset",
+        "chnseta",
+        "chnseti",
+        "chnsetk",
         "chnsetks",
+        "chnsets",
         "chuap",
         "clear",
         "clfilt",
@@ -1363,6 +1371,17 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "flooper",
         "flooper2",
         "floor",
+        "fluidAllOut",
+        "fluidCCi",
+        "fluidCCk",
+        "fluidControl",
+        "fluidEngine",
+        "fluidInfo",
+        "fluidLoad",
+        "fluidNote",
+        "fluidOut",
+        "fluidProgramSelect",
+        "fluidSetInterpMethod",
         "fmanal",
         "fmax",
         "fmb3",
@@ -1397,6 +1416,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "ftchnls",
         "ftconv",
         "ftcps",
+        "ftexists",
         "ftfree",
         "ftgen",
         "ftgenonce",
@@ -1437,6 +1457,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "grain2",
         "grain3",
         "granule",
+        "gtf",
         "guiro",
         "harmon",
         "harmon2",
@@ -1677,6 +1698,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "la_k_upper_solve_mr",
         "la_k_vc_set",
         "la_k_vr_set",
+        "lastcycle",
         "lenarray",
         "lfo",
         "limit",
@@ -1767,6 +1789,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "median",
         "mediank",
         "metro",
+        "metro2",
         "mfb",
         "midglobal",
         "midiarp",
@@ -1845,6 +1868,8 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "nsamp",
         "nstance",
         "nstrnum",
+        "nstrstr",
+        "ntof",
         "ntom",
         "ntrpol",
         "nxtpow2",
@@ -1975,7 +2000,6 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "ptable",
         "ptable3",
         "ptablei",
-        "ptableiw",
         "ptablew",
         "ptrack",
         "puts",
@@ -2120,6 +2144,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "qnan",
         "r2c",
         "rand",
+        "randc",
         "randh",
         "randi",
         "random",
@@ -2180,6 +2205,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "schedkwhen",
         "schedkwhennamed",
         "schedule",
+        "schedulek",
         "schedwhen",
         "scoreline",
         "scoreline_i",
@@ -2282,6 +2308,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "strget",
         "strindex",
         "strindexk",
+        "string2array",
         "strlen",
         "strlenk",
         "strlower",
@@ -2289,6 +2316,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "strrindex",
         "strrindexk",
         "strset",
+        "strstrip",
         "strsub",
         "strsubk",
         "strtod",
@@ -2325,7 +2353,6 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "tableigpw",
         "tableikt",
         "tableimix",
-        "tableiw",
         "tablekt",
         "tablemix",
         "tableng",
@@ -2533,6 +2560,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "array",
         "bformdec",
         "bformenc",
+        "changed",
         "copy2ftab",
         "copy2ttab",
         "hrtfer",
@@ -2542,6 +2570,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "mintab",
         "pop",
         "pop_f",
+        "ptableiw",
         "push",
         "push_f",
         "scalet",
@@ -2560,6 +2589,7 @@ var CsoundOrchestraHighlightRules = function(embeddedRulePrefix) {
         "stack",
         "sumtab",
         "tabgen",
+        "tableiw",
         "tabmap",
         "tabmap_i",
         "tabslice",
@@ -2921,6 +2951,8 @@ oop.inherits(Mode, TextMode);
     this.lineCommentStart = ";";
     this.blockComment = {start: "/*", end: "*/"};
 
+    this.$id = "ace/mode/csound_orchestra";
+    this.snippetFileId = "ace/snippets/csound_orchestra";
 }).call(Mode.prototype);
 
 exports.Mode = Mode;
