@@ -1,5 +1,5 @@
 module Ace
   module Rails
-    VERSION = "4.3"
+    VERSION = "4.4"
   end
 end
