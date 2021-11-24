@@ -7,3 +7,7 @@ ace.config.setModuleUrl("ace/mode/<%= worker %>_worker", "<%= asset_path "ace/wo
 <% mode = File.basename(file, '.js').sub(/^mode-/, '') %>
 ace.config.setModuleUrl("ace/mode/<%= mode %>", "<%= asset_path "ace/mode-#{mode}.js" %>");
 <% end %>
+<% Dir[File.dirname(__FILE__) + '/ace/ext-*.js'].sort.each do |file| %>
+<% ext = File.basename(file, '.js').sub(/^ext-/, '') %>
+ace.config.setModuleUrl("ace/ext/<%= ext %>", "<%= asset_path "ace/ext-#{ext}.js" %>");
+<% end %>
